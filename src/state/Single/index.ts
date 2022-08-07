@@ -1,5 +1,5 @@
-import { API_URL } from '../config/constants';
-import { Entity } from '../types';
+import { API_URL } from '../../config/constants';
+import { Entity } from '../../types';
 
 export const getSingle = (
   type: string,
