@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 
 import reportWebVitals from './reportWebVitals';
@@ -10,10 +11,13 @@ const rootElement = document.getElementById(ROOT_ELEMENT_ID);
 if (!rootElement) throw new Error('Failed to find the root element');
 
 const root = createRoot(rootElement);
+const queryClient = new QueryClient();
 
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
