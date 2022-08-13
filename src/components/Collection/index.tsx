@@ -2,26 +2,24 @@ import React, { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import c from 'classnames';
 
-import { getSingle } from '../../state/Single';
-import { Entity } from '../../types';
+import { getCollection } from '../../state/Collection';
+import { CollectionType } from '../../types';
 
 interface Props {
   type: string;
-  id?: number;
   fields?: string[];
   exclude?: boolean;
-  children: (entity: Entity) => ReactNode;
+  children: (collection: CollectionType) => ReactNode;
 };
 
-const Single: React.FC<Props> = ({ type, id, fields, exclude, children }) => {
-  const { status, data, error } = useQuery(['single', type, id], () => {
-    return getSingle(type, id, fields, exclude);
+const Collection: React.FC<Props> = ({ type, fields, exclude, children }) => {
+  const { status, data, error } = useQuery(['collection', type], () => {
+    return getCollection(type, fields, exclude);
   });
 
   const classNames = c(
-    'Single',
-    `Single--${type}`,
-    (id && `Single--${type}--${id}`),
+    'Collection',
+    `Collection--${type}`,
   );
 
   return (
@@ -39,4 +37,4 @@ const Single: React.FC<Props> = ({ type, id, fields, exclude, children }) => {
   );
 };
 
-export default Single;
+export default Collection;
