@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import c from 'classnames';
 
-import { getSingle } from '../../state/Single';
+import { getSingleEntity } from '../../state/Single';
 import { Entity } from '../../types';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 
 const Single: React.FC<Props> = ({ type, id, fields, populate, children }) => {
   const { status, data, error } = useQuery(['single', type, id], () => {
-    return getSingle(type, id, fields, populate);
+    return getSingleEntity(type, id, fields, populate);
   });
 
   const classNames = c(
