@@ -1,6 +1,9 @@
 export type Entity = {
   type: string;
-  id: number | null;
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 };
 
 export type CollectionType = {

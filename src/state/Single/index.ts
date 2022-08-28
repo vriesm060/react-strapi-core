@@ -1,13 +1,31 @@
-import { API_URL } from '../../config/constants';
+import { API_URL, GENERIC_FIELDS } from '../../config/constants';
 import { Entity } from '../../types';
 
-export const getSingle = (
-  type: string,
-  id: number | null = null,
-  fields: string[] = [],
-  exclude: boolean = false,
-) => {
-  const url = API_URL + '/' + type + (id ? '/' + id : '');
+/**
+ * Fetches a single entity of a Strapi content type.
+ * 
+ * @param {string} type - Strapi content type.
+ * @param {number} id - Optional ID of the entity.
+ * @param {string[]} fields - Optional scalar type fields (e.g. strings, dates, numbers, booleans, etc.).
+ * @param {string[]} populate - Optional Strapi specific types (e.g. media, relation, component, dynamiczone, etc.).
+ * @returns {Entity} - Entity object.
+ */
+export const getSingleEntity = (type: string, id?: number, fields: string[] = [], populate: string[] = []) => {
+  // Generate the field params combining the generic fields and the specified fields.
+  const fieldParams = fields
+    .concat(GENERIC_FIELDS)
+    .map((value, i) => `fields[${i}]=${value}`)
+    .join('&');
+  
+  // Generate the populate params if they are specified, otherwise fetch them all.
+  const populateParams = populate.length > 0
+    ? populate
+      .map((value, i) => `populate[${i}]=${value}`)
+      .join('&')
+    : 'populate=%2A';
+  
+  // Generate the url.
+  const url = API_URL + '/' + type + (id ? '/' + id : '') + '?' + fieldParams + '&' + populateParams;
 
   return fetch (url)
     .then((response) => response.json())
@@ -18,7 +36,7 @@ export const getSingle = (
 
       return {
         type,
-        id,
+        id: data.id,
         ...data.attributes,
       };
     })
