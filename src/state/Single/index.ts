@@ -3,11 +3,14 @@ import { Entity } from '../../types';
 
 export const getSingle = (
   type: string,
-  id: number | null = null,
+  id?: number,
   fields: string[] = [],
-  exclude: boolean = false,
+  populate: string[] = [],
 ) => {
-  const url = API_URL + '/' + type + (id ? '/' + id : '');
+  const metaFields = ['createdAt', 'updatedAt', 'publishedAt'];
+  const fieldParams = fields.concat(metaFields).map((value, i) => `fields[${i}]=${value}`).join('&');
+  const populateParams = populate.length > 0 ? populate.map((value, i) => `populate[${i}]=${value}`).join('&') : 'populate=%2A';
+  const url = API_URL + '/' + type + (id ? '/' + id : '') + '?' + fieldParams + '&' + populateParams;
 
   return fetch (url)
     .then((response) => response.json())
@@ -18,7 +21,7 @@ export const getSingle = (
 
       return {
         type,
-        id,
+        id: data.id,
         ...data.attributes,
       };
     })

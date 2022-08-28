@@ -9,13 +9,13 @@ interface Props {
   type: string;
   id?: number;
   fields?: string[];
-  exclude?: boolean;
+  populate?: string[];
   children: (entity: Entity) => ReactNode;
 };
 
-const Single: React.FC<Props> = ({ type, id, fields, exclude, children }) => {
+const Single: React.FC<Props> = ({ type, id, fields, populate, children }) => {
   const { status, data, error } = useQuery(['single', type, id], () => {
-    return getSingle(type, id, fields, exclude);
+    return getSingle(type, id, fields, populate);
   });
 
   const classNames = c(
